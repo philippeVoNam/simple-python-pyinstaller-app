@@ -10,7 +10,7 @@ pipeline {
         stage('Test') {
             steps {
                 sh '''
-                source env/bin/activate
+                . .env/bin/activate
                 py.test --junit-xml test-reports/results.xml sources/test_calc.py
                 '''
             }
