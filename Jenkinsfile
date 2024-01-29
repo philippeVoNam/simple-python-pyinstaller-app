@@ -1,10 +1,13 @@
 pipeline {
-    agent any 
+    agent any
+    options {
+        skipStagesAfterUnstable()
+    }
     stages {
-        stage('Build') { 
+        stage('Build') {
             steps {
-                sh 'python -m py_compile sources/add2vals.py sources/calc.py' 
-                stash(name: 'compiled-results', includes: 'sources/*.py*') 
+                sh 'python -m py_compile sources/add2vals.py sources/calc.py'
+                stash(name: 'compiled-results', includes: 'sources/*.py*')
             }
         }
         stage('Test') {
@@ -17,15 +20,17 @@ pipeline {
                 }
             }
         }
-        stage('Deliver') {
+        stage('Deliver') { 
             steps {
-                sh "pyinstaller --onefile sources/add2vals.py"
+                sh "pyinstaller --onefile sources/add2vals.py" 
             }
             post {
                 success {
-                    archiveArtifacts 'dist/add2vals'
+                    archiveArtifacts 'dist/add2vals' 
                 }
             }
         }
     }
 }
+
+
